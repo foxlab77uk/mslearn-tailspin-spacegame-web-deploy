@@ -4,7 +4,7 @@
   variables:
     buildConfiguration: 'Release'
     releaseBranchName: 'release'
-
+  
   schedules:
   - cron: '0 3 * * *'
     displayName: 'Deploy every day at 3 A.M.'
@@ -99,30 +99,30 @@
             - task: AzureWebApp@1
               displayName: 'Azure App Service Deploy: website'
               inputs:
-                azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                azureSubscription: 'Azure Pass - Sponsorship'
                 appName: '$(WebAppNameDev)'
                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
-
+  
   - stage: 'Test'
-  displayName: 'Deploy to the test environment'
-  dependsOn: Dev
-  #condition: eq(variables['Build.Reason'], 'Schedule')
-  jobs:
-  - deployment: Deploy
-    pool:
-      vmImage: 'ubuntu-20.04'
-    environment: test
-    variables:
-    - group: 'Release'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
-          - task: AzureWebApp@1
-            displayName: 'Azure App Service Deploy: website'
-            inputs:
-              azureSubscription: 'Resource Manager - Tailspin - Space Game'
-              appName: '$(WebAppNameTest)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+    displayName: 'Deploy to the test environment'
+    dependsOn: Dev
+    #condition: eq(variables['Build.Reason'], 'Schedule')
+    jobs:
+    - deployment: Deploy
+      pool:
+        vmImage: 'ubuntu-20.04'
+      environment: test
+      variables:
+      - group: 'Release'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+            - task: AzureWebApp@1
+              displayName: 'Azure App Service Deploy: website'
+              inputs:
+                azureSubscription: 'Azure Pass - Sponsorship'
+                appName: '$(WebAppNameTest)'
+                package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
